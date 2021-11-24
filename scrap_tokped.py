@@ -1,16 +1,18 @@
 import requests
 from bs4 import BeautifulSoup
 import csv
+import time
 
-url = 'https://www.tokopedia.com/sepatulokalid/product/page/'
+#url = 'https://www.tokopedia.com/sepatulokalid/product/page/'
+url = 'https://www.tokopedia.com/tkprapatan/product/page/'
 user_agent = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:94.0) Gecko/20100101 Firefox/94.0'}
 
 write = csv.writer(open('hasil.xlsx', 'w', newline=''))
 header = ['', 'nama', 'deskripsi', 'kategori', 'berat', 'minimal pesan', 'nomor etalase', 'waktu proses order', 'kondisi', 'gambar1', 'gambar2', 'gambar3', 'gambar4', 'gambar5', 'url1', 'url2', 'ul3', 'sku name', 'status', 'jumlah stok', 'harga', 'asuransi']
 write.writerow(header)
 
-for halaman in range(10, 12):
-    req = requests.get(url+str(halaman)+'?perpage=10', headers=user_agent)
+for halaman in range(1, 3):
+    req = requests.get(url+str(halaman)+'?perpage=1', headers=user_agent)
     print("halaman ke: ", halaman, req)
     soup = BeautifulSoup(req.content, "html.parser")
     semuaProduk = soup.find('div', 'css-tjjb18')
@@ -19,6 +21,7 @@ for halaman in range(10, 12):
         link = l.find('div', 'css-zimbi')
         linkItem = link.find('a')['href']
         req1 = requests.get(linkItem, headers=user_agent)
+        time.sleep(5)
         print(req1, linkItem)
         soup1 = BeautifulSoup(req1.content, "html.parser")
         # ==========================================================
@@ -41,7 +44,7 @@ for halaman in range(10, 12):
         # gambar
         gambar1 = container.find('div', 'css-1y5a13')
         # link gambar1
-        gambar  = gambar1.find('img')['src'].replace('?ect=4g', '')
+        gambar  = gambar1.find('img')['src']
         # harga
         harga   = container.find('div', 'price').text.replace('Rp', '').replace('.', '')
         data = [
@@ -68,5 +71,7 @@ for halaman in range(10, 12):
             harga,
             'ya'
         ]
+        time.sleep(3)
         write = csv.writer(open('hasil.xlsx', 'a', newline=''))
         write.writerow(data)
+        time.sleep(2)
