@@ -7,7 +7,7 @@ import time
 url = 'https://www.tokopedia.com/tkprapatan/product/page/'
 user_agent = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:94.0) Gecko/20100101 Firefox/94.0'}
 
-write = csv.writer(open('hasil.xlsx', 'w', newline=''))
+write = csv.writer(open('hasil.csv', 'w', newline=''))
 header = ['', 'nama', 'deskripsi', 'kategori', 'berat', 'minimal pesan', 'nomor etalase', 'waktu proses order', 'kondisi', 'gambar1', 'gambar2', 'gambar3', 'gambar4', 'gambar5', 'url1', 'url2', 'ul3', 'sku name', 'status', 'jumlah stok', 'harga', 'asuransi']
 write.writerow(header)
 
@@ -42,9 +42,9 @@ for halaman in range(1, 3):
         # kondisi
         kondisi = det[0].find('span', 'main').get_text()
         # gambar
-        gambar1 = container.find('div', 'css-1y5a13')
+        # gambar1 = container.find('div', 'css-1y5a13')
         # link gambar1
-        gambar  = gambar1.find('img')['src']
+        # gambar  = gambar1.find('img')['src']
         # harga
         harga   = container.find('div', 'price').text.replace('Rp', '').replace('.', '')
         data = [
@@ -57,7 +57,7 @@ for halaman in range(1, 3):
             '',
             '',
             kondisi,
-            gambar,
+            'https://i.imgur.com/sAo1G2G.jpeg',
             '',
             '',
             '',
@@ -72,6 +72,6 @@ for halaman in range(1, 3):
             'ya'
         ]
         time.sleep(3)
-        write = csv.writer(open('hasil.xlsx', 'a', newline=''))
+        write = csv.writer(open('hasil.csv', 'a', newline=''))
         write.writerow(data)
         time.sleep(2)
